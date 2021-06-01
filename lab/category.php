@@ -14,40 +14,40 @@
 $category = [];
 $category[] = [
     "id" =>1,
-    "name" =>"Galaxy fold 2",
-    "price" =>30.000,
+    "name" =>"Điều Hòa Lạnh Run Người",
+    "price" =>300,
 
 ];
 $category[1] = [
     "id" =>2,
     "name" =>"Galaxy z fold 2",
-    "price" =>50.000,
+    "price" =>2000,
 
 ];
 
 $category[] = [
     "id" =>3,
-    "name" =>"Galaxy s20",
-    "price" =>20.000,
+    "name" =>"Bphone B86",
+    "price" =>499,
 
 ];
 $category[] = [
     "id" =>4,
-    "name" =>"Galaxy note 20",
-    "price" =>25.000,
+    "name" =>"Bim Bim Cháy Tỏi",
+    "price" =>2,
 
 ];
 $category[] = [
     "id" =>5,
-    "name" =>"Galaxy note 10",
-    "price" =>18.000,
+    "name" =>"Galaxy Tag",
+    "price" =>3,
 
 ];
 
 $category[] = [
     "id" =>6,
-    "name" =>"Galaxy s10",
-    "price" =>13.000,
+    "name" =>"Quạt Trần Siêu Mạnh",
+    "price" =>200,
 
 ];
 
@@ -70,7 +70,7 @@ $category[] = [
     <tr >
         <th scope="row"><?php echo $value["id"];?></th>
         <td><?php echo $value["name"];?></td>
-        <td><?php echo $value["price"];?></td>
+        <td><?php echo $value["price"]."$";?></td>
     </tr>
     <?php }?>
     </tbody>
