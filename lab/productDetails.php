@@ -39,7 +39,6 @@
             $product =$row;
         }
     }
-//if($sv == null) header("Location:.php"); // redirect ve list neu ko tim thay sv
 
 
 ?>

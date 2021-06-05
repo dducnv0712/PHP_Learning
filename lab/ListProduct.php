@@ -11,45 +11,29 @@
 
 </head>
 <body>
+
 <?php
+
 $severname = "localhost";
 $username = "root";
 $password = "";
 $dbname = "product_database";
 $conn = new mysqli($severname,$username,$password,$dbname);
+
 if($conn -> connect_error){
     die("connect error");
 }else{
         echo "<script>alert('ket noi thanh cong')</script>";
     }
+$id_d = $_GET['delete_pr'];
 $sql_txt = "select * from list_product";
 $rs = $conn -> query($sql_txt);
-
 $list_product = [];
-
-if ($rs -> num_rows>0){
-    while ($row = $rs -> fetch_assoc()){
-        $list_product[] =$row;
+if ($rs -> num_rows>0) {
+    while ($row = $rs->fetch_assoc()) {
+        $list_product[] = $row;
     }
 }
-if(isset($_GET['edit'])){
-    $id_e =$_GET['edit'];
-    $resurt = $mysqli -> query("select * from list_product where id = $id_e") or die($mysqli -> error());
-    if(count($resurt)==1){
-        $row_e = $resurt -> fetch_array();
-        $id = $row_e['id-edit-product'];
-        $name = $row_e['name-edit-product'];
-        $category = $row_e['category-edit-product'];
-        $price = $row_e['price-edit-product'];
-        $describe_pr = $row_e['describe-edit-product'];
-    }
-}
-
-$id = '';
-$name = '';
-$category = '';
-$price = '';
-$describe_pr = '';
 ?>
 <div class="container">
     <h1 class="text-center font-weight-bold">Danh Sách Sản Phẩm</h1>
@@ -67,12 +51,15 @@ $describe_pr = '';
         </tr>
     </thead>
     <tbody id="#tbody">
+
     <?php foreach ($list_product as $item) {?>
     <tr >
+
         <th  scope="row"><?php echo $item["stt"];?></th>
         <td ><?php echo $item["name"];?></td>
         <td ><?php echo $item["category"];?></td>
         <td ><?php echo "$".$item["price"];?></td>
+
         <td >
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                 <a href="productDetails.php?details=<?php echo $item['id']; ?>"   class="btn btn-info ">
@@ -84,14 +71,79 @@ $describe_pr = '';
         <td>
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
 
-            <a href="editProduct.php?edit=<?php echo $item['id']; ?>"  class="btn edit-btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit-product" >Sửa</a>
-            <a href="editProduct.php?delete=<?php echo $item['id']; ?>"   class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_product">
+            <a    class="btn edit-btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit-product-<?php echo $item['id']; ?>" >Sửa</a>
+            <a    class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_product-<?php echo $item['id']; ?>">
                Xóa
             </a>
         </div>
+
+            <div class="modal fade" id="delete_product-<?php echo $item['id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Bạn Muốn Xóa Sản Phẩm <?php echo $item['name'] ?>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a  href="deleteProduct.php?delete= <?php echo $item['id']?>" class="btn btn-danger">Xóa</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="edit-product-<?php echo $item['id'];?>" class="modal fade"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title fw-bolder justify-content-center" id="exampleModalLabel">Sửa Sản Phẩm <?php echo $item['name']?></h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="editProduct.php" method="post">
+                                <div class="mb-3">
+                                    <label for="edit-id" class="fw-bolder col-form-label">ID</label>
+                                    <input type="text" name='id_edit' class="form-control" value="<?php echo $item['id']?>" id="edit-id" >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit-name" class="fw-bolder col-form-label">Tên Sản Phẩm</label>
+                                    <input type="text" name="name_edit" class="form-control"  value="<?php echo $item['name']?>" id="edit-name" >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit-price" class="fw-bolder col-form-label">Giá Sản Phẩm</label>
+                                    <input type="text" name="price_edit" class="form-control" value="<?php echo $item['price']?>" id="edit-price" >
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="edit-category" class="fw-bolder col-form-label">Thể Loại</label>
+                                    <input type="text" name="category_edit" class="form-control" value="<?php echo $item['category']?>" id="edit-category" >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit-describe" class="fw-bolder col-form-label">Mô Tả Sản Phẩm</label>
+                                    <textarea type="text" name="describe_edit" class="form-control"   id="edit-describe"  required></textarea>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit"  onclick="window.location.href='editProduct.php?edit_pr=<?php echo $item['id']?>'" class="btn btn-primary">Sửa Sản Phẩm</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </td>
+
     </tr>
+
     <?php }?>
+
 
     </tbody>
 </table>
@@ -144,26 +196,8 @@ $describe_pr = '';
             </div>
         </div>
     </div>
-    <!-- Xóa Sản Phẩm -->
-    <div class="modal fade" id="delete_product" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Bạn Muốn Xóa Sản Phẩm này
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a  href="deleteProduct.php?delete=<?php echo $item['id']; ?>"   class="btn btn-danger">Xóa</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
-<!-- Sửa Sản Phẩm -->
+
     <div id="edit-product" class="modal fade"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -174,30 +208,30 @@ $describe_pr = '';
                 <div class="modal-body">
                     <form action="editProduct.php" method="post">
                         <div class="mb-3">
-                            <label for="recipient-name" class="fw-bolder col-form-label">ID</label>
-                            <input type="text" name='id-edit-product' class="form-control" id="recipient-name" value="<?php  echo $id ?>">
+                            <label for="edit-id" class="fw-bolder col-form-label">ID</label>
+                            <input type="text" name='id_edit' class="form-control" id="edit-id" >
                         </div>
                         <div class="mb-3">
-                            <label for="recipient-name" class="fw-bolder col-form-label">Tên Sản Phẩm</label>
-                            <input type="text" name="name-edit-product" class="form-control" id="recipient-name" value="<?php  echo $name ?>">
+                            <label for="edit-name" class="fw-bolder col-form-label">Tên Sản Phẩm</label>
+                            <input type="text" name="name_edit" class="form-control" id="edit-name" >
                         </div>
                         <div class="mb-3">
-                            <label for="recipient-name" class="fw-bolder col-form-label">Giá Sản Phẩm</label>
-                            <input type="text" name="price-edit-product" class="form-control" id="recipient-name" value="<?php  echo $price ?>">
+                            <label for="edit-price" class="fw-bolder col-form-label">Giá Sản Phẩm</label>
+                            <input type="text" name="price_edit" class="form-control" id="edit-price" >
                         </div>
 
                         <div class="mb-3">
-                            <label for="recipient-name" class="fw-bolder col-form-label">Thể Loại</label>
-                            <input type="text" name="category-edit-product" class="form-control" id="recipient-name" value="<?php  echo $category ?>">
+                            <label for="edit-category" class="fw-bolder col-form-label">Thể Loại</label>
+                            <input type="text" name="category_edit" class="form-control" id="edit-category" >
                         </div>
                         <div class="mb-3">
-                            <label for="recipient-name" class="fw-bolder col-form-label">Mô Tả Sản Phẩm</label>
-                            <textarea type="text" name="describe-edit-product" class="form-control"  id="recipient-name"  required></textarea>
+                            <label for="edit-describe" class="fw-bolder col-form-label">Mô Tả Sản Phẩm</label>
+                            <textarea type="text" name="describe_edit" class="form-control"  id="edit-describe"  required></textarea>
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Sửa Sản Phẩm</button>
+                            <button  type="submit" class="btn btn-primary">Sửa Sản Phẩm</button>
                         </div>
                     </form>
                 </div>
@@ -207,29 +241,8 @@ $describe_pr = '';
     </div>
 
 </div>
-<script>
-    function displayData(e){
-        let  id = 0;
-        const  td = ("#tbody tr td");
-        let  textvalues =[];
-        for (const value of td){
-            if(value.dataset.id == 2){
-                console.log(value);
-            }
-        }
-    }
-   $(".edit-btn").click(e =>{
 
 
-       let textvalues = displayData(e);
-       let  id =$("input[name*='id-product']");
-       let  name =$("input[name*='name-product']");
-       let  price =$("input[name*='price-product']");
-       id.val(textvalues[0]);
-       name.val(textvalues[1])
-       price.val(textvalues[1]);
-   })
-</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

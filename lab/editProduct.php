@@ -1,10 +1,11 @@
 <?php
-$id_e = $_GET['edit'];
-$id = $_POST['id-edit-product'];
-$name = $_POST['name-edit-product'];
-$category = $_POST['category-edit-product'];
-$price = $_POST['price-edit-product'];
-$describe = $_POST['describe-edit-product'];
+$id_e = $_GET['edit_pr'];
+$id = $_POST['id_edit'];
+$name = $_POST['name_edit'];
+$category = $_POST['category_edit'];
+$price = $_POST['price_edit'];
+$describe = $_POST['describe_edit'];
+
 $severname = "localhost";
 $username = "root";
 $password = "";
@@ -13,14 +14,12 @@ $conn = new mysqli($severname, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("connect error");
 }
-echo($id);
-echo($name);
-echo($category);
-echo($describe);
-$sql_txt = "update list_product set id='$id',stt= null, name='$name',category='$category', price=$price, describe_pr='$pescribe' where id = '$id_e' ";
 
+$sql_txt = "UPDATE list_product SET id ='$id', name= '$name',category ='$category',describe_pr ='$describe',price =$price WHERE id='$id_e' ";
 if ($conn->query($sql_txt) === true) {
-    header("location:listProduct.php");
+    header("location:ListProduct.php");
 } else {
-    echo "xửa thất bại";
+    echo "Sửa thất bại";
 }
+
+
